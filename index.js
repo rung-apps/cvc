@@ -17,7 +17,7 @@ function createAlert({ '@id': id, name, price, currency, trackingLinks, descript
                 comment: `
                     ### ${name} por ${currency} ${price},00
                     \n\n
-                    [Confira na CVC](${trackingLinks.trackingLink.ppc})
+                    [Confira na CVC](${trackingLinks.trackingLink[0].ppc})
                     
                     ${description}
                     
