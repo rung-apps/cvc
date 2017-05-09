@@ -1,0 +1,20 @@
+{
+  "name": "cvc",
+  "version": "1.0.0",
+  "description": "Conheça hotéis para reserva na CVC.",
+  "main": "index.js",
+  "author": "Rung <suporte@rung.com.br>",
+  "license": "MIT",
+  "category": "travel",
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "ramda": "^0.23.0",
+    "rung-sdk": "^1.0.7",
+    "superagent": "^3.5.0",
+    "superagent-promise": "^1.1.0"
+  },
+  "rung": {
+    "title": "Hotéis na CVC",
+    "preview": "Hotel Jabuticabeira por R$ 218,00"
+  }
+}
