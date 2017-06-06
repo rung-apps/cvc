@@ -1,7 +1,7 @@
 {
   "name": "cvc",
-  "version": "1.0.0",
-  "description": "Conheça hotéis para reserva na CVC.",
+  "version": "1.0.3",
+  "description": "See hotels for reservation at CVC.",
   "main": "index.js",
   "author": "Rung <suporte@rung.com.br>",
   "license": "MIT",
@@ -15,6 +15,9 @@
   },
   "rung": {
     "title": "Hotéis na CVC",
-    "preview": "Hotel Jabuticabeira por R$ 218,00"
+    "preview": "<div style=\"font-family:Roboto, sans-serif;text-align:center;font-size:12px\"><div style=\"float:left;margin-right:2px;margin-left:-4px;position:absolute\"><img src=\"http://www.cvc.com.br/images/365945.jpg\" width=45 draggable=false style=\"padding:3px;background-color:white;border:3px solid silver;border-radius:30px;margin-top:20px\" /></div><div style=\"float:right;width:89px;margin-top:6px;word-wrap:break-word\">Hotel Jabuticabeira<div style=\"margin-top:17px;font-weight:bold\">R$ 180,00</div></div></div>"
+  },
+  "devDependencies": {
+    "rung-cli": "^0.4.3"
   }
 }
