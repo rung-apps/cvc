@@ -1,5 +1,5 @@
 import { create } from 'rung-sdk';
-import { String as Text, IntegerRange } from 'rung-sdk/dist/types';
+import { Location, IntegerMultiRange } from 'rung-cli/dist/types';
 import Bluebird from 'bluebird';
 import agent from 'superagent';
 import promisifyAgent from 'superagent-promise';
@@ -40,49 +40,53 @@ const styles = {
     }
 };
 
+function render(name, image, price) {
+    return (
+        <div style={ styles.container }>
+            <div style={ styles.imageContainer }>
+                <img
+                    src={ image || 'https://i.imgur.com/NEa4tKe.jpg' }
+                    width={ 45 }
+                    draggable={ false }
+                    style={ styles.thumbnail }
+                />
+            </div>
+            <div style={ styles.contentContainer }>
+                { name }
+                <div style={ styles.price }>R$ { price },00</div>
+            </div>
+        </div>
+    );
+}
+
 function createAlert({ '@id': id, name, price, currency, trackingLinks, description, image }) {
+    const thumbnail = image && image.medium;
     return {
         [id]: {
             title: _('{{name}} for {{currency}} {{price}},00', { name, currency, price }),
-            content: (
-                <div style={ styles.container }>
-                    <div style={ styles.imageContainer }>
-                        <img
-                            src={ image.medium }
-                            width={ 45 }
-                            draggable={ false }
-                            style={ styles.thumbnail }
-                        />
-                    </div>
-                    <div style={ styles.contentContainer }>
-                        { name }
-                        <div style={ styles.price }>R$ { price },00</div>
-                    </div>
-                </div>
-            ),
+            content: render(name, thumbnail, price),
             comment: `
                 ### ${name} ${_('for')} ${currency} ${price},00
                 \n\n
                 [${_('Check it out')} CVC](${trackingLinks.trackingLink[0].ppc})
-                
+
                 ${description}
-                
-                ![${name}](${image.medium})
-            `
+            `,
+            resources: [thumbnail]
         }
     };
 }
 
 function main(context, done) {
-    const { searchTerm, price } = context.params;
+    const { searchTerm, priceRange } = context.params;
 
     return request.get(server)
         .query({
             programs: '15687',
             items: 20,
             searchtype: 'contextual',
-            minprice: 0,
-            maxprice: price,
+            minprice: priceRange[0],
+            maxprice: priceRange[1],
             q: searchTerm
         })
         .then(({ body }) => {
@@ -96,14 +100,24 @@ function main(context, done) {
 const params = {
     searchTerm: {
         description: _('Local'),
-        type: Text,
+        type: Location,
         required: true
     },
-    price: {
-        description: _('Price'),
-        type: IntegerRange(0, 10000),
-        default: 150
+    priceRange: {
+        description: _('Select how much you want to pay per day'),
+        type: IntegerMultiRange(0, 5000),
+        default: [0, 200]
     }
 };
 
-export default create(main, { params, primaryKey: true });
+export default create(main, {
+    params,
+    primaryKey: true,
+    title: _('Hotels in CVC'),
+    description: _('Find the best opportunities and make your booking!'),
+    preview: render(
+        'Hotel Jabuticabeira',
+        'https://i.imgur.com/SPVhJGx.jpg',
+        180
+    )
+});
